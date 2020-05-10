@@ -1,0 +1,33 @@
+public class Solution {
+    public int numDistinct(String S, String T) {
+        if (S == null || S.length() == 0) {
+            return 0;
+        }
+        if (T == null || T.length() == 0) {
+            return 1;
+        }
+        int row = S.length();
+        int col = T.length();
+        int[][] arr = new int[row + 1][col + 1];
+        // 初始化，将多加的一行设置为0，多加的一列设置为 1 ，满足递推过程的
+        for (int i = 0; i < row; i++) {
+            arr[i][0] = 1;
+        }
+        // 开始递推
+        for (int i = 1; i <= row; i++) {
+            for (int j = 1; j <= col; j++) {
+                // S 和 T 的 i - 1 个字符相同
+                if (S.charAt(i - 1) == T.charAt(j - 1)) {
+                    // arr[i - 1][j - 1] 表示使用 S.charAt(i) 的字符，
+                    // 因为此时S 和 T 字符串的 i - 1 个字符是相同的
+                    // arr[i - 1][j] 表示从 S 的前 i - 1 个字符串中查找和 T 的前 j 个字符串相同的字串个数
+                    arr[i][j] = arr[i - 1][j - 1] + arr[i - 1][j];
+                } else {
+                    // S 和 T字符串的第 i - 1 个字符不相同
+                    arr[i][j] = arr[i - 1][j];
+                }
+            }
+        }
+        return arr[row][col];
+    }
+}
