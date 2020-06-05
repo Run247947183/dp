@@ -1,0 +1,24 @@
+class NumArray {
+    // 动态规划
+    // 创建比原数组长 1 的 dp 数组
+    // dp 数组中每个元素为之前元素的和，不包括本身
+    public int[] dp;
+    public NumArray(int[] nums) {
+        dp = new int[nums.length + 1];
+        for (int i = 0; i < nums.length; i++) {
+            dp[i + 1] = dp[i] + nums[i];
+        }
+    }
+    
+    // 将区间 j 的下一个 dp 元素减去下标为 i 的 dp 元素值
+    // 之所以要 j + 1 是因为要包含 j 本身
+    public int sumRange(int i, int j) {
+        return dp[j + 1] - dp[i];
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * int param_1 = obj.sumRange(i,j);
+ */
