@@ -1,0 +1,16 @@
+class Solution {
+    // String.indexOf(char c, int x) 意思是从 String 的 x 位置开始寻找 c 字符
+    // 找到了返回下标，没找到返回 -1;
+    // 遍历 s ，每次找到一个字符的下标，下一次寻找就从该位置后面开始寻找
+    public boolean isSubsequence(String s, String t) {
+        char[] chars= s.toCharArray();
+        int j = -1;
+        for (int i = 0; i < chars.length; i++) {
+            j = t.indexOf(chars[i], j + 1);
+            if (j == -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
