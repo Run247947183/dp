@@ -1,0 +1,11 @@
+class Solution {
+    // 动态规划
+    // 建立 dp 数组，每个元素为到达该位置的体力最小花费
+    public int minCostClimbingStairs(int[] cost) {
+        int[] dp = new int[cost.length + 2];
+        for (int i = 2; i < dp.length; i++) {
+            dp[i] = Math.min(dp[i - 1], dp[i - 2]) + cost[i - 2];
+        }
+        return Math.min(dp[dp.length - 1], dp[dp.length - 2]);
+    }
+}
