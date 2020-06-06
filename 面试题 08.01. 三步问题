@@ -1,0 +1,22 @@
+class Solution {
+    // 动态规划
+    public int waysToStep(int n) {
+        if (n <= 2) {
+            return n;
+        }
+        if (n == 3) {
+            return 4;
+        }
+        int step1 = 1;
+        int step2 = 2;
+        int step3 = 4;
+        for (int i = 4; i <= n; i++) {
+            // 注意只要超过 2 个数字相加就要取模，否则可能超出
+            int tmp = ((step1 + step2) % 1000000007 + step3) % 1000000007;
+            step1 = step2;
+            step2 = step3;
+            step3 = tmp;
+        }
+        return step3;
+    }
+}
