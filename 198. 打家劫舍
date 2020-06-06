@@ -1,0 +1,16 @@
+class Solution {
+    // 动态规划
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int[] dp = new int[nums.length + 1];
+        dp[1] = nums[0];
+        for (int i = 2; i <= nums.length; i++) {
+            // 注意：此处比较的是，前一个位置和（前两个位置 + nums[i]）
+            // 如果前一个位置钱多，那么可以不抢当前这户人家
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i - 1]);
+        }
+        return dp[dp.length - 1];
+    }
+}
