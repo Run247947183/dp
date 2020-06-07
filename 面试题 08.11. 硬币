@@ -1,0 +1,20 @@
+class Solution {
+    // 动态规划：背包问题
+    // 一共有 4 个单位大小
+    // 设置 dp 数组长度为 n + 1，初始化 dp[0] = 1
+    // dp[i] 表示当前背包容量为 i 可以装下 i 单位大小的装法一共几种
+    // dp[10] = dp[10] + dp[9]，并且现在单位大小为 1
+    // 表示现在背包大小为 10，所以背包装了 一个 1 
+    // 就看背包大小为 9 时能装下 1 的装法有多少种
+    public int waysToChange(int n) {
+        int[] arr = {1, 5, 10, 25};
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        for (int num : arr) {
+            for (int i = num; i <= n; i++) {
+                dp[i] = (dp[i] + dp[i - num]) % 1000000007;
+            }
+        }
+        return dp[n];
+    }
+}
