@@ -1,0 +1,32 @@
+class Solution {
+    // 动态规划，整理后的做法和打家劫舍一样
+    // 如果是相同的数字，那么这些相同的数字要么被统一获得点数，要么被统一删除
+    // 所以需要将数组中相同数字的元素整理到一起
+    // 创建一个 arr 数组，其长度为 nums 中值最大的数字 + 1
+    // arr[i] 表示 nums 数组中数字 i 出现了 arr[i] 次
+    // dp[i] 表示当前最大的获得点数为 dp[i]
+    public int deleteAndEarn(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        int maxOne = 0; // 找出 nums 中值最大的元素
+        for (int num : nums) {
+            maxOne = Math.max(maxOne, num);
+        }
+        // 创建 arr[i] 计算 nums 数组中数字出现的次数
+        int[] arr = new int[maxOne + 1];
+        for (int num : nums) {
+            arr[num]++;
+        }
+        int[] dp = new int[maxOne + 1];
+        dp[1] = arr[1] * 1;
+        for (int i = 2; i < arr.length; i++) {
+            // 比较判断哪种情况获得点数最大
+            dp[i] = Math.max(dp[i - 1], arr[i] * i + dp[i - 2]);
+        }
+        return dp[arr.length - 1];
+    }
+}
