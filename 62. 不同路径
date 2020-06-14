@@ -1,0 +1,21 @@
+class Solution {
+    // 动态规划
+    // dp[i][j] 表示从(0,0)位置到 (i,j) 位置的路径总数
+    // 递推公式：dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+    // 该位置向上一步的路径数量 + 该位置向左一步的路径数量
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // 初始化工作
+                // 二维数组的 dp[i][0] 和 dp[0][j] 都为 1
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+}
