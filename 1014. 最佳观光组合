@@ -1,0 +1,16 @@
+class Solution {
+    // 动态规划
+    // 两个景点的得分为 A[i] + i + A[j] - j，分成两个部分观察
+    // 其中每次寻找 A[i] + i 最大的景点，另一部分就为遍历数组的 A[j] - j
+    // A[j] - j 就随着数组遍历在变化，而 A[i] + i 是判断变化，每次都是最大值
+    public int maxScoreSightseeingPair(int[] A) {
+        int res = 0;
+        int maxOne = A[0] + 0;
+        for (int i = 1; i < A.length; i++) {
+            res = Math.max(res, maxOne + A[i] - i);
+            // 更新最大值
+            maxOne = Math.max(maxOne, A[i] + i);
+        }
+        return res;
+    }
+}
