@@ -1,0 +1,25 @@
+class Solution {
+    // 动态规划
+    // 两个 dp 数组：up 和 down
+    // up[i] 表示 i 坐标元素大于 i - 1 坐标元素的摆动序列最长长度
+    // down[i] 表示 i 坐标元素小于 j - 1 坐标元素时的摆动序列最长长度
+    public int wiggleMaxLength(int[] nums) {
+        if (nums.length <= 1) {
+            return nums.length;
+        }
+        int[] up = new int[nums.length];
+        int[] down = new int[nums.length];
+        for (int i = 1; i < nums.length; i++) {
+            // 可能中间有不连续的情况，需要一一判断
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    up[i] = Math.max(up[i], down[j] + 1);
+                }
+                if (nums[i] < nums[j]) {
+                    down[i] = Math.max(down[i], up[j] + 1);
+                }
+            }
+        }
+        return 1 + Math.max(down[nums.length - 1], up[nums.length - 1]);
+    }
+}
