@@ -1,0 +1,32 @@
+class Solution {
+    // 动态规划
+    // dp[i][j] 二维动态数组，其中 j 为 0 或者 1
+    // dp[i][0] 表示 i 以及之前的最小值，dp[i][1] 反之表示之前的最大值
+    public int maxProduct(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        int[][] dp = new int[nums.length][2];
+        dp[0][0] = nums[0];
+        dp[0][1] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            // 当 nums[i] 大于 0 ，则dp[i - 1][0] 还是表示之前的最小值
+            // 如果 nums[i] 小于 0 ，则表示最大值，反之也一样
+            if (nums[i] >= 0) {
+                dp[i][0] = Math.min(nums[i], dp[i - 1][0] * nums[i]);
+                dp[i][1] = Math.max(nums[i], dp[i - 1][1] * nums[i]);
+            } else {
+                dp[i][0] = Math.min(nums[i], dp[i - 1][1] * nums[i]);
+                dp[i][1] = Math.max(nums[i], dp[i - 1][0] * nums[i]);
+            }
+        }
+        int tmp = dp[0][1];
+        for (int i = 1; i < nums.length; i++) {
+            tmp = Math.max(tmp, dp[i][1]);
+        }
+        return tmp;
+    }
+}
