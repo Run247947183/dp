@@ -1,0 +1,28 @@
+class Solution {
+    // 动态规划
+    // dp[i] 表示当 N 为 i 时，先出手是否能赢
+    // 因为是最佳状态，所以在 1 到 i 的这个范围内，只要存在 i % j == 0
+    // 并且 dp[i - j ] 为 false，表示当 N 为 i 时，先出手的人选择了 j 
+    // 然后第二个人在 i - j 的基础上无法进一步替换满足条件，所以 dp[i] = true
+    // 表示 N 为 i 时，先手的人赢，否则为 dp[i] 为 false
+    public boolean divisorGame(int N) {
+        if (N == 1) {
+            return false;
+        }
+        if (N == 2) {
+            return true;
+        }
+        boolean[] dp = new boolean[N + 1];
+        dp[1] = false;
+        dp[2] = true;
+        for (int i = 3; i <= N; i++) {
+            for (int j = 1; j < i; j++) {
+                if (i % j == 0 && !dp[i - j]) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[N];
+    }
+}
