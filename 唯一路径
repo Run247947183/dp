@@ -1,0 +1,34 @@
+# dp
+动态规划
+import java.util.*;
+
+
+public class Solution {
+    /**
+     * 
+     * @param m int整型 
+     * @param n int整型 
+     * @return int整型
+     */
+    // 动态规划
+    // dp[i][j] 表示从 （0，0） 位置到 （i,j）位置一共几条路径
+    // 初始化：第一行和第一列全部为 1，因为从（0，0）位置到第一行或者第一列哪个位置都只有 1 条路径
+    // 要么是一直往下，要么是一直往右
+    // 转移方程：dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+    // 当前（i,j）位置左边和上面的路径和
+    public int uniquePaths (int m, int n) {
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 0; i < n; i++) {
+            dp[0][i] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+}
