@@ -1,0 +1,26 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // 创建二维动态数组，其中 dp[i][j] 表示如下
+    // 字符串s1的长度为i，字符串s2的长度为j，此时两者的最长公共子序列的长度
+    // 例如:当s1为"abcde"，s2为"ace"，i为3，j为2时，dp[i][j] = 2
+    // 转移方程：第一种情况：当i位置和j位置的字符不同时，dp[i][j]就为左边或者上边的最大值，表示目前两者的公共子序列的最大值
+    // 第二种情况：两个字符串位置字符相同时，dp[i][j]就为 1 + dp[i-1][j-1]，表示两个字符串后退都一个字符时两者的公共子序列长度
+    // 注意体会 dp[i][j] 表示的意思，就能结合转移方程 
+    public int longestCommonSubsequence(String text1, String text2) {
+        char[] chars1 = text1.toCharArray();
+        char[] chars2 = text2.toCharArray();
+        int[][] dp = new int[chars1.length + 1][chars2.length + 1];
+        for (int i = 1; i <= chars1.length; i++) {
+            for (int j = 1; j <= chars2.length; j++) {
+                if (chars1[i - 1] == chars2[j - 1]) {
+                    dp[i][j] = 1 + dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[chars1.length][chars2.length];
+    }
+}
