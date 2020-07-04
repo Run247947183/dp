@@ -1,0 +1,33 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // dp[i] 表示到 i 位置时最长的有效括号字符串长度
+    // 第一种情况：当s.charAt(i)为 ( 时不去管它，当它为 ) 时，再来判断 s.charAt(i - 1) 是不是 (
+    // 是的话 dp[i] = 2; 此时还需要加上 dp[i - 2]
+    // 也就是要加上 ( 前面的最长有效括号字符串长度
+    // 如果此时 s.charAt(i) 为 )，并且 s.charAt(i - 1) 也为 )
+    // 那么就需要判断 dp[i - 1] 是不是 0，如果为 0 说明不存在有效的括号字符串
+    // 如果不为 0 ，则 dp[i] = 2+dp[i - 1]+dp[i - dp[i - 1] - 2]
+    public int longestValidParentheses(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int[] dp = new int[s.length()];
+        int max = 0;
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) == ')') {
+                if (s.charAt(i - 1) == '(') {
+                    dp[i] = 2 + (i >= 2 ? dp[i - 2] : 0);
+                } else {
+                    if (i - dp[i - 1] > 0 && s.charAt(i - dp[i - 1] - 1) == '(') {
+                        dp[i] = 2 + dp[i - 1] + 
+                        (i - dp[i - 1] >= 2 ? dp[i - dp[i - 1] - 2] : 0);
+                    }
+                }
+            }
+            max = Math.max(max, dp[i]);
+        }
+        return max;
+    }
+}
