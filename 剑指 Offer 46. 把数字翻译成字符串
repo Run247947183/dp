@@ -1,0 +1,32 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // 将 num 转换成字符串 s 来解决
+    // dp 数组的每个位置表示，在 s 中当前下标下能形成字符串的组数
+    // 将大问题转换成了小问题，f(i)表示在当前 i 坐标之前的 s 字符串能形成的组数
+    // 如果 s 中，当前坐标为 i ，如果 i 前一个字符为 0 ，说明前一个字符和当前字符不能翻译成字母，那么 dp[i] 就等于 dp[i + 1]，反之则为 dp[i - 1] + dp[i - 2]
+    public int translateNum(int num) {
+        if (num < 10) {
+            return 1;
+        }
+        String s = String.valueOf(num);
+        int[] dp = new int[s.length() + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 1; i < s.length(); i++) {
+            // 判断前一个字符是否为 0 的特殊情况
+            if (s.charAt(i - 1) == '0') {
+                dp[i + 1] = dp[i]; 
+                continue;
+            }
+            int tmp = Integer.valueOf(s.substring(i - 1, i + 1));
+            if (tmp > 25) {
+                dp[i + 1] = dp[i]; 
+            } else {
+                dp[i + 1] = dp[i] + dp[i - 1];
+            }
+        }
+        return dp[s.length()];
+    }
+}
