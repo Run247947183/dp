@@ -1,0 +1,35 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // 从终点往（0，0）位置走，每次还是只能走右边或者下边两个选择
+    // 建立dp数组，在最后增加一行全部元素为Integer.MAX_VALUE，在右边增加一列为Integer.MAX_VALUE
+    // dp[i][j]表示从终点位置到（i,j）位置所需要的最少健康点数
+    // Math.min(dp[i + 1][j], dp[i][j + 1])，先找到右边和下边的最小健康点数
+    // 然后转移方程为： dp[i][j] = Math.max(min - dungeon[i][j], 1)
+    // 因为要和当前位置元素判断，因为当前位置元素dungeon[i][j]可能是负数也可能是正数
+    // 如果是正数并且比min大，则dp[i][j]结果就为1,因为当前位置为增加的健康点数，那么之后所需要减少的健康点数小于当前增加的，所以只需要从 1 开始，判断往(0,0)位置所需要的健康点数
+    // 如果当前位置是负数，那么min减去一个负数，就表示需要多少健康点数
+    public int calculateMinimumHP(int[][] dungeon) {
+        int row = dungeon.length;
+        int col = dungeon[0].length;
+        if (row == 0 || col == 0) {
+            return 0;
+        }
+        int[][] dp = new int[row + 1][col + 1];
+        for (int i = 0; i <= row; i++) {
+            dp[i][col] = Integer.MAX_VALUE;
+        }
+        for (int i = 0; i <= col; i++) {
+            dp[row][i] = Integer.MAX_VALUE;
+        }
+        dp[row][col - 1] = dp[row - 1][col] = 1;
+        for (int i = row - 1; i >= 0; i--) {
+            for (int j = col - 1; j >= 0; j--) {
+                int min = Math.min(dp[i + 1][j], dp[i][j + 1]);
+                dp[i][j] = Math.max(min - dungeon[i][j], 1);
+            }
+        }
+        return dp[0][0];
+    }
+}
