@@ -1,0 +1,27 @@
+# dp
+动态规划
+方法一：
+import java.util.*;
+public class Solution {
+    // 动态规划
+    // books[i]表示从 0 到 i 的字符串是包含在 dict 字典中
+    // 转移方程：判断从 0 到当前 i 为止的字符串是不是包含在字典中，就需要看从 0 到 i - 1中
+    // 是否有 books[j] == true && dict.contains(s.substring(j, i))，如果成立
+    // 则说明 books[i] == true ，表示从 0 到 i 位置的字符串可以分割，并且包含在 dict 中
+    public boolean wordBreak(String s, Set<String> dict) {
+        if (s.length() == 0 || dict.size() == 0) {
+            return false;
+        }
+        boolean[] books = new boolean[s.length() + 1];
+        books[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (books[j] && dict.contains(s.substring(j, i))) {
+                    books[i] = true;
+                    break;
+                }
+            }
+        }
+        return books[s.length()];
+    }
+}
