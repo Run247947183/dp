@@ -16,3 +16,38 @@ class Solution {
         return false;
     }
 }
+
+方法二：
+class Solution {
+    // sum 为 i 位置为止，前面数字的和
+    // 每次将 sum % k，表示当前子数组和比 k 多出来多少
+    // 然后再和 map 中比较，前面是否出现过 sum ，也就是当前子数组多出来的数量
+    // 如果出现过，并且子数组长度大于等于 2 ，则直接返回 true
+    // 例如第一个实例，当 sum = 23 时，比 6 多出来 5，map.put(5, 0)
+    // 当 sum = 5 + 2 = 7 时，7 % 6 == 1,表示比 6 多出来 1，此时 map 中不包含 1
+    // 当 sum = 1 + 4 = 5 时，发现 map 中出现过 5
+    // 也就是说在nums[i]为23时，比 6 的倍数多出来 5，但是到了num[i]为 4 时
+    // 还是比 6 多出来 5，说明中间有子数组的和为 6 的倍数
+    public boolean checkSubarraySum(int[] nums, int k) {
+        if (nums.length == 0) {
+            return false;
+        }
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (k != 0) {
+                sum %= k;
+            }
+            if (map.containsKey(sum)) {
+                if (i - map.get(sum) > 1) {
+                    return true;
+                }
+            } else {
+                map.put(sum, i);
+            }
+        }
+        return false;
+    }
+}
