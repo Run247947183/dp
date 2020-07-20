@@ -1,0 +1,21 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // dp[i][j] 表示数组A的前i个数字和数组B的前j个数字能绘制的最大连接数
+    public int maxUncrossedLines(int[] A, int[] B) {
+        int len1 = A.length;
+        int len2 = B.length;
+        int[][] dp = new int[len1 + 1][len2 + 1];
+        for (int i = 1; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                if (A[i - 1] == B[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[len1][len2];
+    }
+}
