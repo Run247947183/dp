@@ -1,0 +1,30 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // 状态：dp[i][j]表示前i个数字(包括i本身)划分成j个子数组中的各个子数组的最大值最小
+    // 转移方程：dp[i][j]=Math.min(dp[i][j],Math.max(枚举从0到i - 1中划分的子数组), sum[i]-sum[k])
+    // 其中 k 表示枚举过程中的子数组个数，从 0 到 i - 1 去分别进行 1 - m 次的划分，这个就会用到之前的 dp 状态值，然后和 k 到 i 位置的子数组和进行比较，找出最大值
+    // 然后再和 dp[i][j] 本身进行比较，找到最小值
+    public int splitArray(int[] nums, int m) {
+        int len = nums.length;
+        int[][] dp = new int[len + 1][m + 1];
+        int[] sumPrev = new int[len + 1];
+        for (int i = 1; i <= len; i++) {
+            sumPrev[i] = sumPrev[i - 1] + nums[i - 1];
+        }
+        for (int i = 0; i <= len; i++) {
+            Arrays.fill(dp[i], Integer.MAX_VALUE);
+        }
+        dp[0][0] = 0;
+        for (int i = 1; i <= len; i++) {
+            for (int j = 1; j <= Math.min(m, i); j++) {
+                for (int k = 0; k < i; k++) {
+                    dp[i][j] = Math.min(dp[i][j], 
+                    Math.max(dp[k][j - 1], sumPrev[i] - sumPrev[k]));
+                }
+            }
+        }
+        return dp[len][m];
+    }
+}
