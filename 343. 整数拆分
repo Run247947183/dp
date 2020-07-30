@@ -1,0 +1,22 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // 状态：dp[i] 表示整数为 i 时，至少分成两个整数的和，这些整数和乘积最大值为 dp[i]
+    // 转移方程：当前数字为 i，可以分成整数 j 和 i - j
+    // j 可以继续划分，那 j 划分后的整数乘积最大值为 dp[j] * (i - j)
+    // j 也可以不再划分，那么最大值为：j * (i - j)
+    // 然后将这两种情况比较，得出最大值
+    // 其中 j 的取值范围从 1 到 i （不包括 i）依次的比较
+    public int integerBreak(int n) {
+        int[] dp = new int[n + 1];
+        for (int i = 2; i <= n; i++) {
+            int count = 0;
+            for (int j = 1; j < i; j++) {
+                count = Math.max(Math.max(j * (i-j), (i - j) * dp[j]), count);
+            }
+            dp[i] = count;
+        }
+        return dp[n];
+    }
+}
