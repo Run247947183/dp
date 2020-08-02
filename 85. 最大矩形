@@ -1,0 +1,36 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // dp[i][j] 表示以(i,j)位置为矩形右下角的第i行的连续 1 个数，相当于矩形的长度
+    // 当计算以某位置为矩形右下角的矩形面积时，还需要知道矩形的宽
+    // 那么就从该位置往上，寻找宽度，当遇到 matrix[i][j] 为 0 时停止
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int[][] dp = new int[row][col];
+        int res = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (matrix[i][j] == '1') {
+                    dp[i][j] = j == 0 ? 1 : dp[i][j - 1] + 1;
+                    int y = dp[i][j]; // 知道了当前行的最大连续 1 的长度
+                    for (int k = i; k >= 0; k--) {
+                        if (matrix[k][j] == '0') {
+                            // 剪枝，遇到 0 的情况，说明该位置不是矩形的一部分
+                            break;
+                        }
+                        // 找到最小的矩形长度，这样才是以(i,j)为右下角的矩形长度
+                        y = Math.min(y, dp[k][j]);
+                        // i - k + 1就为矩形的宽度
+                        res = Math.max(res, y * (i - k + 1));
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
