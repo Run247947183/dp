@@ -1,0 +1,40 @@
+# dp
+动态规划
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    // 动态规划 + 深度优先搜索算法
+    // 每一个节点有两个选择：选择和不选择
+    // 每一个节点以及其之下的左右子树的最大值也可以分为这两种情况，假设当前节点为 x
+    // 如果选择 x，则它的左右子树都不能选择，最大值为 x.val + notSelect(x.left) + noSelect(x.right)
+    // 如果不选择 x,则它的左右子树可以有选择和不选择两种方式，则 x 节点的最大值为：
+    // Math.max(select(x.left),notSelect(x.left)) + Math.max(select(x.right),notSelect(x.right));
+    // 每一个节点的最大值都通过 Map 来保存
+    public Map<TreeNode, Integer> select = new HashMap<>();
+    public Map<TreeNode, Integer> notSelect = new HashMap<>();
+    public int rob(TreeNode root) {
+        dfs(root);
+        return Math.max(select.getOrDefault(root,0),notSelect.getOrDefault(root,0));
+    }
+    public void dfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        dfs(root.left);
+        dfs(root.right);
+        
+        select.put(root, root.val + notSelect.getOrDefault(root.left,
+        0) + notSelect.getOrDefault(root.right, 0));
+
+        notSelect.put(root, 
+        Math.max(select.getOrDefault(root.left, 0),                                        notSelect.getOrDefault(root.left, 0)) 
+        + Math.max(select.getOrDefault(root.right, 0), notSelect.getOrDefault(root.right, 0)));
+    }
+}
