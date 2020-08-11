@@ -1,0 +1,40 @@
+# dp
+动态规划
+class Solution {
+    // 类似于最长上升子序列的做法
+    // 先将二维数组通过第一个元素进行从小到大的排序
+    // 然后在二维数组的第二个元素中找出最长的上升子序列就为最终的答案
+    public int maxEnvelopes(int[][] envelopes) {
+        if (envelopes == null||envelopes.length == 0||envelopes[0].length == 0) {
+            return 0;
+        }
+        int row = envelopes.length;
+        // 排序
+        Arrays.sort(envelopes, new Comparator<int[]>(){
+            public int compare(int[] o1, int[] o2) {
+                if (o1[0] == o2[0]) {
+                    return o1[1] - o2[1];
+                }
+                return o1[0] - o2[0];
+            }
+        });
+        // 求最长上升子序列
+        int res = 1;
+        int[] dp = new int[row];
+        dp[0] = 1;
+        for (int i = 1; i < row; i++) {
+            int count = 0;
+            for (int j = 0; j < i; j++) {
+                // 前提是后面的第一个和第二个元素值都要大于前一个
+                if (envelopes[i][0] > envelopes[j][0]) {
+                    if (envelopes[i][1] > envelopes[j][1]) {
+                        count = Math.max(count, dp[j]);
+                    }
+                }
+            }
+            dp[i] = count + 1;
+            res = Math.max(dp[i], res);
+        }
+        return res;
+    }
+}
