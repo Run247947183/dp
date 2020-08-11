@@ -1,0 +1,49 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // len[i] 表示以 i 为结尾的最长递增子序列的长度
+    // count[i] 表示以 i 为结尾的最长递增子序列个数
+    public int findNumberOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int[] len = new int[nums.length];
+        int[] count = new int[nums.length];
+        Arrays.fill(count, 1);
+        for (int right = 0; right < nums.length; right++) {
+            for (int left = 0; left < right; left++) {
+                // 当前位置元素大于以 left 位置的元素
+                if (nums[left] < nums[right]) {
+                    
+                    if (len[left] >= len[right]) {
+                        // 如果以 left 结尾的递增子序列长度大于目前的以right为结尾的子序长度，那么就重新更新 len[right] 的值，为最长的子列
+                        len[right] = len[left] + 1;
+                        // 并且更新最长递增子序列的个数为 count[left] 的个数
+                        // 因为只是长度边长了 1，但是个数还是和 count[left] 一样
+                        count[right] = count[left];
+                    } else {
+                        // 表明以 left 结尾的子序列长度 + 1就和当前 len[right]一样
+                        // 所以要将 count[right] 加上 count[left]
+                        if (len[left] + 1 == len[right]) {
+                            count[right] += count[left];
+                        }
+                    }
+                }
+            }
+        }
+        // 最长长度的递增子序列
+        int maxLen = 0;
+        for (int tmp : len) {
+            maxLen = Math.max(maxLen, tmp);
+        }
+        // 最长递增子序列的个数
+        int res = 0;
+        for (int i = 0; i < len.length; i++) {
+            if (len[i] == maxLen) {
+                res += count[i];
+            }
+        }
+        return res;
+    }
+}
