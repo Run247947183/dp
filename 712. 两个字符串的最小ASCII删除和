@@ -1,0 +1,34 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // dp[i][j]表示s1从i位置到结尾和s2从j位置到结尾，找到相同字符串所需删除的ascii最小和
+    // 状态转移方程：分为两种情况
+    // 一种：如果一方的字符串为 null，则当前dp[i][j]就为不为null字符串的从i到结尾的和
+    // 另一种：如果s1.charAt(i)==s2.charAt(j)，那么dp[i][j]就为两个字符串前一个位置的值
+    // 否则为 min(dp[i + 1][j] + s1.charAt(i), dp[i][j + 1] + s2.charAt(j))
+    // 表示s1字符串i后一个位置和当前s2字符串j相同所需删除的最小值，以及
+    // s1字符串i和s2字符串j后一个位置相同所需删除的最小值，两者的最小值
+    public int minimumDeleteSum(String s1, String s2) {
+        int len1 = s1.length();
+        int len2 = s2.length();
+        int[][] dp = new int[len1 + 1][len2 + 1];
+        for (int i = len1 - 1; i >= 0; i--) {
+            dp[i][len2] = dp[i + 1][len2] + (int)(s1.charAt(i));
+        }
+        for (int i = len2 - 1; i >= 0; i--) {
+            dp[len1][i] = dp[len1][i + 1] + (int)(s2.charAt(i));
+        }
+        for (int i = len1 - 1; i >= 0; i--) {
+            for (int j = len2 - 1; j >= 0; j--) {
+                if (s1.charAt(i) == s2.charAt(j)) {
+                    dp[i][j] = dp[i + 1][j + 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i + 1][j] + (int)(s1.charAt(i)),
+                    dp[i][j + 1] + (int)(s2.charAt(j)));
+                }
+            }
+        }
+        return dp[0][0];
+    }
+}
