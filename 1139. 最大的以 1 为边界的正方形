@@ -1,0 +1,40 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // 三维数组，第三维数组是两个变量 0 和 1
+    // dp[i][j][0]表示以(i,j)位置的 1 左边最长连续 1 的个数
+    // dp[i][j][1]表示以(i,j)位置的 1 上边最长连续 1 的个数
+    // 每次获取当前为 1 的位置，找到该位置左边和上边最长连续 1 个数的最小值
+    // 因为只有左边和上边都满足相同个数的 1 长度，才能建立起正方形，假设个数为 x
+    // 找到最小位置后，需要继续检查 dp[i][j - x][1] 和 dp[i - x][j][0] 是否都大于 x
+    // 如果都大于，才能建立其正方形，总体来说就是检查四条边是否满足正方形
+    // 第一次先找到正方形的右下角位置，然后从这个位置往左和往上找正方形的边长
+    // 然后再到正方形左下角往上检查和正方形右上角往左检查最长连续 1 的个数是不是大于 x 边长，如果大于，才能满足条件，然后再和之前保存好的最长正方形边长进行比较
+    public int largest1BorderedSquare(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        int row = grid.length;
+        int col = grid[0].length;
+        int[][][] dp = new int[row + 1][col + 1][2];
+        int res = 0;
+        for (int i = 1; i <= row; i++) {
+            for (int j = 1; j <= col; j++) {
+                if (grid[i - 1][j - 1] == 1) {
+                    dp[i][j][0] = dp[i][j - 1][0] + 1;
+                    dp[i][j][1] = dp[i - 1][j][1] + 1;
+                    int count = Math.min(dp[i][j - 1][0], dp[i - 1][j][1]);
+                    while (count > 0) {
+                        if (dp[i][j-count][1]>count && dp[i-count][j][0]>count) {
+                            break;
+                        }
+                        count--;
+                    }
+                    res = Math.max(res, count + 1);
+                }
+            }
+        }
+        return res * res;
+    }
+}
