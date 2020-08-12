@@ -14,3 +14,30 @@ class Solution {
         return cash;
     }
 }
+
+对于上述简便方法的进一步详细描述
+class Solution {
+    // 动态规划
+    // noHold[i]表示第i天没有持有股票的最大化收益
+    // hold[i]表示第i天持有股票的最大化收益
+    // 转移方程：第i天的决定要依靠前一天持有和不持有股票的收益去判断
+    // noHold[i] = Math.max(noHold[i - 1], hold[i - 1] + prices[i] - fee);
+    // hold[i] = Math.max(hold[i - 1], noHold[i - 1] - prices[i]);
+    public int maxProfit(int[] prices, int fee) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+        int len = prices.length;
+        int[] noHold = new int[len];
+        int[] hold = new int[len];
+        hold[0] = -prices[0];
+        for (int i = 1; i < len; i++) {
+            // 当天要想不持有股票，则需要和前一天不持有股票，以及前一天持有股票出售相比
+            noHold[i] = Math.max(noHold[i - 1], hold[i - 1] + prices[i] - fee);
+            // 当天要想持有股票，则需要和前一个持有股票，以及今天购买股票，两者相比
+            hold[i] = Math.max(hold[i - 1], noHold[i - 1] - prices[i]);
+        }
+        // 最后直接返回不持有股票的最大化收益，因为持有股票就一定不可能是最大化收益
+        return noHold[len - 1];
+    }
+}
