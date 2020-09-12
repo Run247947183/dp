@@ -1,0 +1,25 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // dp[i] 表示字符串前 i 个字符中最少未识别的字符数
+    // 转移方程：从 0 到 i 间遍历，查找是否存在 j 到 i 的字符串在字典中存在
+    // 如果存在则判断 Math.min(dp[i], dp[j])，因为从 j 到 i 的字符串已经识别
+    public int respace(String[] dictionary, String sentence) {
+        if (sentence == null || sentence.length() == 0) {
+            return 0;
+        }
+        int len = sentence.length();
+        int[] dp = new int[len + 1];
+        Set<String> set = new HashSet<>(Arrays.asList(dictionary));
+        for (int i = 1; i <= len; i++) {
+            dp[i] = dp[i - 1] + 1;
+            for (int j = 0; j < i; j++) {
+                if (set.contains(sentence.substring(j, i))) {
+                    dp[i] = Math.min(dp[i], dp[j]);
+                }
+            }
+        }
+        return dp[len];
+    }
+}
