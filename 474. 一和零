@@ -1,0 +1,33 @@
+# dp
+动态规划
+class Solution {
+    // 动态规划
+    // 状态 dp[i][j] 表示有 i 个 0 和 j 个 1 时，能够拼出的最多字符串个数
+    // 转移方程：dp(i, j) = max(1 + dp(i - cost_zero[k], j - cost_one[k]))
+    // 其中 k 表示第 k 个字符串，cost_zero[k] 和 cost_one[k] 表示该字符串中 0 和 1 的个数
+    // 类似于背包问题，只不过是 1 和 0 两个背包
+    public int findMaxForm(String[] strs, int m, int n) {
+        if (strs == null || strs.length == 0) {
+            return 0;
+        }
+        int[][] dp = new int[m + 1][n + 1];
+        for (String s : strs) {
+            int[] arr = helper(s);
+            // 从 m 到 arr[0] ，再从 n 到 arr[1] 中去遍历
+            for (int zero = m; zero >= arr[0]; zero--) {
+                for (int one = n; one >= arr[1]; one--) {
+                    dp[zero][one] = Math.max(dp[zero][one], 1 + dp[zero - arr[0]][one - arr[1]]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+    // 计算出 s 字符串中 1 和 0 的个数
+    public int[] helper(String s) {
+        int[] arr = new int[2];
+        for (char c : s.toCharArray()) {
+            arr[c - '0']++;
+        }
+        return arr;
+    }
+}
